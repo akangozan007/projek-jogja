@@ -1,0 +1,27 @@
+.textareapg{
+    background-color: #1e2c46; width: 100%; height:100%; border:none; resize:none; box-sizing:border-box;
+}
+
+.textareajwb{
+    background-color: #1e2c46; width: auto; height:auto; border:none; resize:none; box-sizing:border-box;
+}
+
+.btn-like {
+    display: inline-block;
+    /* padding: 50px; */
+    background-color: #1e2c46; /* Warna latar belakang seperti tombol peringatan */
+    color: #555962; /* Warna teks */
+    text-align: center; /* Teks di tengah */
+    border-radius: 5px; /* Membuat sudut-sudutnya melengkung */
+    cursor: pointer; /* Menunjukkan pointer saat di-hover */
+    text-decoration: none; /* Menghilangkan garis bawah */
+    border: 1px solid transparent; /* Border seperti tombol */
+    transition: background-color 0.3s ease; /* Efek transisi saat di-hover */
+    font-size: 120px;
+    width:100%;
+}
+
+.btn-like:hover {
+    background-color: #082050; /* Warna saat di-hover */
+    color: white;
+}

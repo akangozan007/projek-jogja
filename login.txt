@@ -1,0 +1,33 @@
+  <?php
+    session_start();
+    include "koneksi.php";
+    ?>
+
+ <?php
+    if (isset($_POST['login'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // Cek login sebagai user
+        $qry_user = $koneksi->query("SELECT * FROM db_user WHERE email='$email' AND password='$password'");
+        $result_user = mysqli_num_rows($qry_user);
+
+        if ($result_user == 1) {
+            $data_user = $qry_user->fetch_assoc();
+            $_SESSION['user'] = $data_user;
+            echo "<script>alert('Login Berhasil sebagai User!');window.location='index.html';</script>";
+        } else {
+            // Jika tidak ditemukan di tabel user, cek login sebagai admin
+            $qry_admin = $koneksi->query("SELECT * FROM login_admin WHERE email='$email' AND password='$password'");
+            $result_admin = mysqli_num_rows($qry_admin);
+
+            if ($result_admin == 1) {
+                $data_admin = $qry_admin->fetch_assoc();
+                $_SESSION['admin'] = $data_admin;
+                echo "<script>alert('Login Berhasil sebagai Admin!');window.location='index.html';</script>";
+            } else {
+                echo "<script>alert('Login Gagal! Periksa kembali email dan password Anda.');window.location='login.php';</script>";
+            }
+        }
+    }
+    ?>
