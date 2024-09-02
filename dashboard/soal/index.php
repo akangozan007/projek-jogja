@@ -22,6 +22,8 @@
               include 'buat_soal.php';
             }else if($_GET['page']==''){
               include 'home_soal.php';
+            }else if($_GET['page']=='test'){
+              include 'test.php';
             }else{
               include '404.php';
             }

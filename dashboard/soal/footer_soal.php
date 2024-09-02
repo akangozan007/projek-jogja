@@ -1,6 +1,6 @@
    <!-- container-scroller -->
     <!-- jquery -->
-    <script src=" assets/vendors/jquery.min.js"></script>
+   
     <!-- plugins:js -->
     <script src=" assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->

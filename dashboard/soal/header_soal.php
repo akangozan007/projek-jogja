@@ -48,6 +48,9 @@
                           overflow-y: auto !important;
         }
     </style>
+    <!-- jquery js -->
+     <!-- <script src=" assets/vendors/jquery.min.js"></script> -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
   <body>
     <div class="container-scroller">

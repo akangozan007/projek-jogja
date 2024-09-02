@@ -42,7 +42,7 @@ document.addEventListener('click', function(event) {
                             <button type="button" class="btn btn-danger position-absolute top-0 end-0">Close</button>
                         </div>
                     </div>
-                    <textarea name="" id="${textareaId}" class="textareajwb p-5" placeholder="Jawaban ${String.fromCharCode(64 + counter)}"></textarea>  
+                    <textarea name="textarea[]" id="${textareaId}" class="textareajwb p-5" placeholder="Jawaban ${String.fromCharCode(64 + counter)}"></textarea>  
                 </div>
             </div>
         `;
@@ -95,3 +95,42 @@ $('#jumlah-soal').on('input', function() {
     }
 });
 
+
+$('#simpanquiz').on('submit', function(event) {
+    event.preventDefault(); // Mencegah form submit secara default
+    // Event listener untuk mendeteksi perubahan pada checkbox
+    $('.form-check-input').on('change', function() {
+        // Array untuk menyimpan semua checkbox
+        let allValues = [];
+
+        // Iterasi semua checkbox dengan class form-check-input
+        $('.form-check-input').each(function() {
+            // Menangkap nilai dan status checkbox (checked atau tidak)
+            allValues.push({
+                id: $(this).attr('id'),
+                value: $(this).val(),
+                checked: $(this).is(':checked')
+            });
+        });
+
+        // Menampilkan hasil di halaman
+        $('#saved-values').html(JSON.stringify(allValues, null, 2));
+    });
+
+    // Initial load untuk menampilkan status awal semua checkbox
+    $('.form-check-input').trigger('change');
+    
+    $.ajax({
+        url: 'buat_soal.php',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(response) {
+            // Handle response dari server
+            $('#result').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle jika terjadi error
+            console.error('AJAX Error:', error);
+        }
+    });
+});

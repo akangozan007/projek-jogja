@@ -1,7 +1,4 @@
 <?php
-// session_start();
-
-// Pastikan koneksi ke database sudah ada
 include '../../config/koneksi.php'; // Ganti dengan path yang sesuai ke file koneksi database Anda
 
 if (isset($_POST['simpanquiz'])) {
@@ -17,88 +14,49 @@ if (isset($_POST['simpanquiz'])) {
     $nama_quizz = $_POST['kelas_quiz'];
     $jumlah_soal = $_POST['jumlah_soal'];
     $kategori_soal = $_POST['kategori_quiz'];
-    $pertanyaan_pilgan = $_POST['pertanyaan_pilgan']; // Pertanyaan disimpan sebagai array
-    $opsi_pilgan = $_POST['opsi'];
-  
+    
+    // Pastikan 'pertanyaan_pilgan' adalah array sebelum digunakan
+    $pertanyaan_pilgan = isset($_POST['pertanyaan_pilgan']) && is_array($_POST['pertanyaan_pilgan']) ? $_POST['pertanyaan_pilgan'] : [];
+    
+    // Pastikan 'opsi' adalah array sebelum digunakan
+    $opsi_pilgan = isset($_POST['opsi']) && is_array($_POST['opsi']) ? $_POST['opsi'] : [];
+    $jawaban_pilgan = [];
+    $jawaban_pilgan =  $_POST['textarea'];
+
     if (isset($pilihanjenissoal) && $pilihanjenissoal == 'pilihan-ganda') {
-        // iterasi soal
-        for ($a = 0; $a < $jumlah_soal; $a++) {
+        // Iterasi soal
+        for ($a = 0; $a < $jumlah_soal; $a++) { // Changed condition to < instead of <=
+            $c = 1;
             if (isset($pertanyaan_pilgan[$a])) {
                 $soal = $pertanyaan_pilgan[$a];
-                echo '<p class="text-danger">Soal ' . ($a + 1) . ': ' . $soal . '<p>';
-                echo '<p class="text-danger">List Pilihan Ganda : </p>';
-                
-          }
-            //  // Debugging: Tampilkan isi array pertanyaan_quizz
-            //     echo '<pre>';
-            //     print_r($pertanyaan_pilgan);
-            //     echo '</pre>';
+                echo '<p class="text-danger">Soal ' . ($a + 1) . ': ' . htmlspecialchars($soal) . '</p>';
+                echo '<p class="text-danger">List Pilihan Ganda :</p>';
+                //  Menampilkan opsi yang dikirim melalui form
+                if (!empty($jawaban_pilgan)) {
+                    // foreach ($jawaban_pilgan as $jawaban[$a][$b]) {
+                    //     $jawaban[$a][$b];
+                    //     echo 'opsi ='.' '.  $jawaban[$a][$b] . '<br>';
+                    // }
+                    // if(){
 
+                    // }
+                }else {
+                    echo '<p class="text-warning">Tidak ada opsi yang dikirim.</p>';
+                }
+            }
+            $c++;
         }
-    } elseif (isset($pilihanjenissoal) && $pilihanjenissoal == 'essay') {
+    } else if (isset($pilihanjenissoal) && $pilihanjenissoal == 'essay') {
         // Logika untuk soal essay di sini
-    }else{
-        echo '<p>data tidak terinput</p>';
+        echo '<p class="text-success">Soal essay berhasil diterima.</p>';
+    } else {
+        echo '<p>Data tidak terinput</p>';
     }
-    // Sisanya tetap sama seperti sebelumnya
 
-    // // Menggunakan transaksi untuk memastikan konsistensi data
-    // $conn->begin_transaction();
-
-    // try {
-    //     // Insert ke tabel kuis
-    //     $sql_quiz = "INSERT INTO kuis (title, description, creator_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
-    //     $stmt = $conn->prepare($sql_quiz);
-    //     $stmt->bind_param("sss", $nama_quizz, $kategori_soal, $author_soal);
-    //     $stmt->execute();
-        
-    //     $quiz_id = $conn->insert_id; // Dapatkan ID kuis yang baru diinsert
-        
-    //     // Insert ke tabel pertanyaan
-    //     $question_type = 'pilihan-ganda'; // Misalkan tipe soal adalah pilihan ganda
-        
-    //     $sql_question = "INSERT INTO pertanyaan (quiz_id, question_text, question_type, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
-    //     $stmt = $conn->prepare($sql_question);
-    //     $stmt->bind_param("iss", $quiz_id, $pertanyaan_quizz, $question_type);
-    //     $stmt->execute();
-        
-    //     $question_id = $conn->insert_id; // Dapatkan ID pertanyaan yang baru diinsert
-        
-    //     // Mengambil opsi jawaban
-    //     $jumlah_opsi = 1; // Atur sesuai jumlah opsi yang Anda punya
-    //     for ($i = 0; $i < $jumlah_opsi; $i++) {
-    //         if (isset($_POST['textarea-' . $i])) {
-    //             $option_text = $_POST['textarea-' . $i];
-    //             $is_correct = isset($_POST['options-' . $i]) ? 1 : 0;
-                
-    //             $sql_option = "INSERT INTO options (question_id, option_text, is_correct) VALUES (?, ?, ?)";
-    //             $stmt = $conn->prepare($sql_option);
-    //             $stmt->bind_param("isi", $question_id, $option_text, $is_correct);
-    //             $stmt->execute();
-                
-    //             $option_id = $conn->insert_id; // Dapatkan ID opsi yang baru diinsert
-                
-    //             if ($is_correct) {
-    //                 $sql_correct_answer = "INSERT INTO jawaban_benar (question_id, option_id) VALUES (?, ?)";
-    //                 $stmt = $conn->prepare($sql_correct_answer);
-    //                 $stmt->bind_param("ii", $question_id, $option_id);
-    //                 $stmt->execute();
-    //             }
-    //         }
-    //     }
-
-    //     // Commit transaksi
-    //     $conn->commit();
-        
-    //     echo '<h1>Data berhasil disimpan.</h1>';
-
-    // } catch (Exception $e) {
-    //     // Rollback transaksi jika terjadi error
-    //     $conn->rollback();
-    //     echo 'Terjadi kesalahan: ' . $e->getMessage();
-    // }
 }
+
 ?>
+
 
 <div class="row">
     <div class="col-md-10 col-12 grid-margin stretch-card">
@@ -108,7 +66,7 @@ if (isset($_POST['simpanquiz'])) {
                 <p class="card-description">Pilih salah satu saja</p>
                 <p class="card-description">Soal soal</p>
                 <!-- form -->
-                <form action="" method="post" enctype="multipart/form-data">
+                <form action="" method="post" enctype="multipart/form-data" id="buat-soal-soal">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -172,7 +130,7 @@ if (isset($_POST['simpanquiz'])) {
                                                             <div class="row">
                                                                 <div class="col p-3">
                                                                     <label class="form-check-label position-absolute top-0 start-0">
-                                                                        <input type="checkbox" name="opsi[]" class="form-check-input text-start" id="essay" value="A">
+                                                                        <input type="checkbox" name="opsi[]" class="form-check-input text-start" id="essay opsi-abc" value="A">
                                                                         <i class="input-helper pe-2"></i>
                                                                         A
                                                                     </label>
@@ -181,7 +139,7 @@ if (isset($_POST['simpanquiz'])) {
                                                                     <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0">Close</button>
                                                                 </div>
                                                             </div>
-                                                            <textarea name="textarea-0" id="" class="textareajwb p-5" placeholder="Jawaban A"></textarea>
+                                                            <textarea name="textarea[]" id="" class="textareajwb p-5" placeholder="Jawaban A"></textarea>
                                                         </div>
                                                     </div>
                                                     <!-- ./opsi A -->
@@ -232,7 +190,7 @@ if (isset($_POST['simpanquiz'])) {
                                     <!-- ./form deadline pengerjaan -->
                                     <br><br>
                                     <div class="container" id="simpan-form">
-                                        <button name="simpanquiz" class="btn btn-primary">Simpan Perubahan</button>
+                                        <button name="simpanquiz" type="submit" class="btn btn-primary" id="simpanquiz">Simpan Perubahan</button>
                                     </div>
                                 </div>
                             </div>
