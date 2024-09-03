@@ -22,29 +22,27 @@ if (isset($_POST['simpanquiz'])) {
     $opsi_pilgan = isset($_POST['opsi']) && is_array($_POST['opsi']) ? $_POST['opsi'] : [];
     $jawaban_pilgan = [];
     $jawaban_pilgan =  $_POST['textarea'];
-
+    
     if (isset($pilihanjenissoal) && $pilihanjenissoal == 'pilihan-ganda') {
         // Iterasi soal
         for ($a = 0; $a < $jumlah_soal; $a++) { // Changed condition to < instead of <=
-            $c = 1;
+      
             if (isset($pertanyaan_pilgan[$a])) {
                 $soal = $pertanyaan_pilgan[$a];
                 echo '<p class="text-danger">Soal ' . ($a + 1) . ': ' . htmlspecialchars($soal) . '</p>';
                 echo '<p class="text-danger">List Pilihan Ganda :</p>';
-                //  Menampilkan opsi yang dikirim melalui form
-                if (!empty($jawaban_pilgan)) {
-                    // foreach ($jawaban_pilgan as $jawaban[$a][$b]) {
-                    //     $jawaban[$a][$b];
-                    //     echo 'opsi ='.' '.  $jawaban[$a][$b] . '<br>';
-                    // }
-                    // if(){
-
-                    // }
+                echo '<p class="text-danger" id="hasilnya">List Pilihan Ganda :</p>';
+                return $soal[$a];
+                // return $soal; 
+                // mengambil data dari ajax js
+                if (isset($_POST['textarea'])) {
+                    $pilihan = $_POST['textarea'];
+                    print_r($pilihan);
+                }
                 }else {
-                    echo '<p class="text-warning">Tidak ada opsi yang dikirim.</p>';
+                    echo '<p class="text-warning">Tidak ada pertanyaan yang dibuat.</p>';
                 }
             }
-            $c++;
         }
     } else if (isset($pilihanjenissoal) && $pilihanjenissoal == 'essay') {
         // Logika untuk soal essay di sini
@@ -53,7 +51,7 @@ if (isset($_POST['simpanquiz'])) {
         echo '<p>Data tidak terinput</p>';
     }
 
-}
+
 
 ?>
 
@@ -139,7 +137,7 @@ if (isset($_POST['simpanquiz'])) {
                                                                     <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0">Close</button>
                                                                 </div>
                                                             </div>
-                                                            <textarea name="textarea[]" id="" class="textareajwb p-5" placeholder="Jawaban A"></textarea>
+                                                            <textarea name="textarea[]" id="textarea-0" class="textareajwb p-5" placeholder="Jawaban A"></textarea>
                                                         </div>
                                                     </div>
                                                     <!-- ./opsi A -->

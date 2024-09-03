@@ -17,7 +17,7 @@ $("#pilgan").on("change", function() {
 });
 
 let counter = 1;
-{/* <input type="checkbox" name="ceklis_pilihan" id="pilgan" value="pilihan-ganda"></input> */}
+/* <input type="checkbox" name="ceklis_pilihan" id="pilgan" value="pilihan-ganda"></input> */
 // <input type="checkbox"  id="${optionId}" name="${optionId}"/>
 // Event delegation untuk menambahkan elemen baru saat tombol "+" diklik
 document.addEventListener('click', function(event) {
@@ -84,6 +84,7 @@ $('#jumlah-soal').on('input', function() {
 
     if (jumlahSoal > 1) {
         for (let i = 2; i <= jumlahSoal; i++) {
+            let a=0;
             if (pilganForm.is(':visible')) {
                 let clonedPilganForm = pilganForm.clone().attr('id', 'pilgan-form-' + i).addClass('duplicate');
                 pilganForm.after(clonedPilganForm);
@@ -91,46 +92,10 @@ $('#jumlah-soal').on('input', function() {
                 let clonedEssayForm = essayForm.clone().attr('id', 'essay-form-' + i).addClass('duplicate');
                 essayForm.after(clonedEssayForm);
             }
+            a+=1;
         }
     }
 });
 
 
-$('#simpanquiz').on('submit', function(event) {
-    event.preventDefault(); // Mencegah form submit secara default
-    // Event listener untuk mendeteksi perubahan pada checkbox
-    $('.form-check-input').on('change', function() {
-        // Array untuk menyimpan semua checkbox
-        let allValues = [];
 
-        // Iterasi semua checkbox dengan class form-check-input
-        $('.form-check-input').each(function() {
-            // Menangkap nilai dan status checkbox (checked atau tidak)
-            allValues.push({
-                id: $(this).attr('id'),
-                value: $(this).val(),
-                checked: $(this).is(':checked')
-            });
-        });
-
-        // Menampilkan hasil di halaman
-        $('#saved-values').html(JSON.stringify(allValues, null, 2));
-    });
-
-    // Initial load untuk menampilkan status awal semua checkbox
-    $('.form-check-input').trigger('change');
-    
-    $.ajax({
-        url: 'buat_soal.php',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function(response) {
-            // Handle response dari server
-            $('#result').html(response);
-        },
-        error: function(xhr, status, error) {
-            // Handle jika terjadi error
-            console.error('AJAX Error:', error);
-        }
-    });
-});
