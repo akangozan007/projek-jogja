@@ -1,101 +1,84 @@
-// opsi tuk memilih jenis soal
+
+
+    // opsi tuk memilih jenis soal
 function toggleForm(idToShow) {
-    $("#essay-form, #pilgan-form").hide();
+    $("#essay-soal, .pilgan-soal").hide();
     $("#essay, #pilgan").prop('checked', false);
     if (idToShow) {
         $("#" + idToShow).prop('checked', true);
-        $("#" + idToShow + "-form").show();
+        $("#" + idToShow + "-soal").show();
     }
 }
 
 $("#essay").on("change", function() {
     toggleForm($(this).is(":checked") ? "essay" : null);
+    return essay();
 });
 
 $("#pilgan").on("change", function() {
     toggleForm($(this).is(":checked") ? "pilgan" : null);
+    return pilgan();
 });
 
-let counter = 1;
-/* <input type="checkbox" name="ceklis_pilihan" id="pilgan" value="pilihan-ganda"></input> */
-// <input type="checkbox"  id="${optionId}" name="${optionId}"/>
-// Event delegation untuk menambahkan elemen baru saat tombol "+" diklik
-document.addEventListener('click', function(event) {
-    const target = event.target.closest('[id^="customButton"]');
-    if (target) {
-        const opsi_opsi = 'col' + counter; 
-        const optionId = 'option-' + counter;
-        const textareaId = 'textarea-' + counter;
-        const newOption = `
-            <div class="col hapus" id='${opsi_opsi}'>
-                <div class="card shadow-sm">
-                    <div class="row">
-                        <div class="col p-3">
-                            <label class="form-check-label position-absolute top-0 start-0" for="${optionId}">
-                                
-                                <input type="checkbox" class="form-check-input" id="${optionId}" name="opsi[]" value="${String.fromCharCode(64 + counter)}">
-                               <i class="input-helper pe-2"></i>
-                                ${String.fromCharCode(64 + counter)}
-                            </label>
-                        </div>
-                        <div class="col p-3">
-                            <button type="button" class="btn btn-danger position-absolute top-0 end-0">Close</button>
-                        </div>
-                    </div>
-                    <textarea name="textarea[]" id="${textareaId}" class="textareajwb p-5" placeholder="Jawaban ${String.fromCharCode(64 + counter)}"></textarea>  
-                </div>
+// operasi pilgan 
+function pilgan() {
+    $("#sumInput").keyup(function(){
+        let sumInput = $(this).val();  // Mengambil nilai dari input
+        $("#listQ").html(''); // Menghapus konten lama setiap kali input berubah
+        // $("#pilgan-form").html('');
+    
+        if ($.isNumeric(sumInput) && sumInput > 0) {
+            for (let index = 0; index < sumInput; index++) {
+                
+                let newQuestion = $("#template").clone().removeAttr('id').show();
+    
+                // Set nomor soal dan name attribute yang unik
+                // newQuestion.find('.nomorsoal').text('Soal ' + (index + 1));
+                // index+=1;
+                newQuestion.find('.nomorsoal').text('Soal ' + (index+1));
+                newQuestion.find('textarea[name="question[]"]').attr('name', `question[${index}]`);
+                newQuestion.find('.pilihanmu .option .opsi').attr('name', `opsi[${index}][]`);
+                newQuestion.find('.pilihanmu .option .isipilihan').attr('name', `isipilihan[${index}][]`);
+    
+                // Tambahkan event listener untuk tombol tambah opsi di dalam soal
+                newQuestion.find('.tambah').on('click', function() {
+                    addOption(newQuestion, index);
+                });
+    
+                // Tambahkan soal baru ke dalam listQ
+                $("#listQ").append(newQuestion);
+            }
+        }
+    });
+    
+    // Fungsi untuk menambahkan opsi baru
+    function addOption(questionElement, questionIndex) {
+        let optionCount = questionElement.find('.pilihanmu .option').length + 1;
+        // var style = "textareajwb p-5 col";
+    
+        let newOption = `
+            <div class="option">
+             <label class="form-check-label">
+                <input type="checkbox" name="opsi[${questionIndex}][]" class="opsi form-check-input">
+                ${optionCount}    
+            </label>
+                <textarea name="isipilihan[${questionIndex}][]" class="isipilihan textareajwb p-5 col" placeholder="Masukkan pilihan ${optionCount}"></textarea>
+                <button type="button" class="hapus btn btn-danger btn">Hapus Opsi</button>
             </div>
         `;
-        const container = target.closest('.row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3');
-        
-        // Ubah ID customButton sebelum menambahkannya kembali ke DOM
-        const customButton = target;
-        customButton.id = 'customButton-' + counter;
-        
-        // Tambahkan elemen baru sebelum customButton
-        container.insertAdjacentHTML('beforeend', newOption);
-        
-        // Tambahkan kembali customButton di akhir container
-        container.appendChild(customButton);
-        
-        counter++;
-    }
-});
-
-// Event listener untuk menghapus elemen saat tombol "Close" diklik
-document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('btn-danger')) {
-        event.preventDefault();
-        event.stopPropagation();
-        const colElement = event.target.closest('.hapus.col');
-        if (colElement) {
-            colElement.parentNode.removeChild(colElement);
-            counter--;
-        }
-    }
-});
-
-// value jumlah soal
-$('#jumlah-soal').on('input', function() {
-    let jumlahSoal = $(this).val();
-    let pilganForm = $('#pilgan-form');
-    let essayForm = $('#essay-form');
-    $('.duplicate').remove();
-
-    if (jumlahSoal > 1) {
-        for (let i = 2; i <= jumlahSoal; i++) {
-            let a=0;
-            if (pilganForm.is(':visible')) {
-                let clonedPilganForm = pilganForm.clone().attr('id', 'pilgan-form-' + i).addClass('duplicate');
-                pilganForm.after(clonedPilganForm);
-            } else if (essayForm.is(':visible')) {
-                let clonedEssayForm = essayForm.clone().attr('id', 'essay-form-' + i).addClass('duplicate');
-                essayForm.after(clonedEssayForm);
-            }
-            a+=1;
-        }
-    }
-});
+    
+        // Tambahkan opsi ke dalam pilihanmu
+        questionElement.find('.pilihanmu').append(newOption);
+    
+        // Event listener untuk menghapus opsi
+        questionElement.find('.hapus').last().on('click', function() {
+            $(this).parent('.option').remove();
+        });
+    }    
+}
 
 
-
+  
+function essay(){
+    $(".essay-soal").toggle();
+}

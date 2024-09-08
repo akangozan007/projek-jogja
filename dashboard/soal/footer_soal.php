@@ -1,6 +1,8 @@
    <!-- container-scroller -->
     <!-- jquery -->
-   
+    <!-- Pastikan jalur ini benar atau gunakan CDN jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/soal.js"></script>
     <!-- plugins:js -->
     <script src=" assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
@@ -23,5 +25,5 @@
     <script src=" assets/js/file-upload.js"></script>
     <script src=" assets/js/typeahead.js"></script>
     <script src=" assets/js/select2.js"></script>
-    <script src="assets/js/soal.js"></script>
+ 
     <!-- End custom js for this page -->

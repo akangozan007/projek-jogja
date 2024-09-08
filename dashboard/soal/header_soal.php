@@ -47,10 +47,18 @@
                           height: 180vh !important;
                           overflow-y: auto !important;
         }
+  
+        .form-group {
+            margin-bottom: 20px;
+            /* border: 1px solid #ddd; */
+            padding: 10px;
+        }
+  
     </style>
     <!-- jquery js -->
      <!-- <script src=" assets/vendors/jquery.min.js"></script> -->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="assets/js/soal.js"></script>
     </head>
   <body>
     <div class="container-scroller">
